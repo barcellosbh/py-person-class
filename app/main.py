@@ -9,19 +9,12 @@ class Person:
 
 def create_person_list(people_dicts: list) -> list:
     Person.people = {}
-
-    instances = []
-    for p_dict in people_dicts:
-        new_person = Person(p_dict["name"], p_dict["age"])
-        instances.append(new_person)
-
+    instances = [Person(p["name"], p["age"]) for p in people_dicts]
     for p_dict in people_dicts:
         current_person = Person.people[p_dict["name"]]
-
         for key in ["wife", "husband"]:
-            if key in p_dict and p_dict[key] is not None:
-                spouse_name = p_dict[key]
+            spouse_name = p_dict.get(key)
+            if spouse_name:
                 spouse_instance = Person.people[spouse_name]
                 setattr(current_person, key, spouse_instance)
-
     return instances
